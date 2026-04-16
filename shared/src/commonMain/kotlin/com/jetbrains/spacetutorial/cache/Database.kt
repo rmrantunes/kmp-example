@@ -1,8 +1,8 @@
 package com.jetbrains.spacetutorial.cache
 
-import com.jetbrains.spacetutorial.Links
-import com.jetbrains.spacetutorial.Patch
-import com.jetbrains.spacetutorial.RocketLaunch
+import com.jetbrains.spacetutorial.model.Links
+import com.jetbrains.spacetutorial.model.Patch
+import com.jetbrains.spacetutorial.model.RocketLaunch
 
 internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())

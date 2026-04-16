@@ -1,6 +1,6 @@
 package com.jetbrains.spacetutorial.network
 
-import com.jetbrains.spacetutorial.RocketLaunch
+import com.jetbrains.spacetutorial.model.RocketLaunch
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
