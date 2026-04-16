@@ -1,5 +1,7 @@
-package com.jetbrains.spacetutorial
+package com.jetbrains.spacetutorial.di
 
+import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
+import com.jetbrains.spacetutorial.SpaceXSDK
 import com.jetbrains.spacetutorial.cache.AndroidDatabaseDriverFactory
 import com.jetbrains.spacetutorial.network.SpaceXApi
 import org.koin.android.ext.koin.androidContext

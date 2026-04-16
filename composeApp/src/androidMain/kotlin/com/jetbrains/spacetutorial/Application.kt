@@ -1,6 +1,7 @@
 package com.jetbrains.spacetutorial
 
 import android.app.Application
+import com.jetbrains.spacetutorial.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

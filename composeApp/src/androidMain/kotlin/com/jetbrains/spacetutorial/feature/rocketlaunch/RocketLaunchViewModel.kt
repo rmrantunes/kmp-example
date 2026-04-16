@@ -1,9 +1,11 @@
-package com.jetbrains.spacetutorial
+package com.jetbrains.spacetutorial.feature.rocketlaunch
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jetbrains.spacetutorial.RocketLaunch
+import com.jetbrains.spacetutorial.SpaceXSDK
 import kotlinx.coroutines.launch
 
 class RocketLaunchViewModel(private val sdk: SpaceXSDK) : ViewModel() {
