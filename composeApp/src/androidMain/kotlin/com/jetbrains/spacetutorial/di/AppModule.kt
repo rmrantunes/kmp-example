@@ -1,6 +1,6 @@
 package com.jetbrains.spacetutorial.di
 
-import com.jetbrains.spacetutorial.SpaceXSDK
+import com.jetbrains.spacetutorial.network.SpaceXSDK
 import com.jetbrains.spacetutorial.cache.AndroidDatabaseDriverFactory
 import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
 import com.jetbrains.spacetutorial.feature.rocketlaunch.CommonRocketLaunchViewModel

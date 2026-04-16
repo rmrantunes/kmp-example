@@ -1,6 +1,6 @@
 package com.jetbrains.spacetutorial.feature.rocketlaunch
 
-import com.jetbrains.spacetutorial.SpaceXSDK
+import com.jetbrains.spacetutorial.network.SpaceXSDK
 import com.jetbrains.spacetutorial.ui.RocketLaunchUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
