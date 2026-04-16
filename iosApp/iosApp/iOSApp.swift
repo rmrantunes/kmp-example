@@ -8,8 +8,9 @@ struct iOSApp: App {
     }
 
     var body: some Scene {
+        let di = KoinHelper()
         WindowGroup {
-            ContentView(viewModel: .init())
+            ContentView(viewModel: di.rocketLaunchViewModel)
         }
     }
 }

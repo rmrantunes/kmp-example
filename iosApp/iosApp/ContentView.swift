@@ -1,60 +1,49 @@
 import SwiftUI
 import Shared
 
+@MainActor
 struct ContentView: View {
-    @ObservedObject private(set) var viewModel: ViewModel
+    @State private(set) var viewModel: SharedRocketLaunchViewModel
+    
+    @State private var state = RocketLaunchScreenState(
+        isLoading: false, launches: []
+    )
 
     var body: some View {
         NavigationView {
             listView()
                 .navigationBarTitle("SpaceX Launches")
-                .navigationBarItems(trailing: Button("Reload") {
-                    self.viewModel.loadLaunches(forceReload: true)
-                })
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Reload") {
+                            load()
+                        }
+                    }
+                }
+        }
+        .task {
+            for await state in self.viewModel.state {
+                self.state = state
+            }
+        }
+        .task {
+            try? await self.viewModel.load()
         }
     }
 
     private func listView() -> AnyView {
-        switch viewModel.launches {
-        case .loading:
+        if(state.isLoading) {
             return AnyView(Text("Loading...").multilineTextAlignment(.center))
-        case .result(let launches):
-            return AnyView(List(launches) {launch in
+        } else {
+            return AnyView(List(state.launches) {launch in
                 RocketLaunchRow(rocketLaunch: launch)
             })
-        case .error(let description):
-            return AnyView(Text(description).multilineTextAlignment(.center))
         }
     }
-}
-
-extension ContentView {
-    enum LoadableLaunches {
-        case loading
-        case result([RocketLaunch])
-        case error(String)
-    }
-
-    @MainActor
-    class ViewModel: ObservableObject {
-        @Published var launches = LoadableLaunches.loading
-
-        let helper: KoinHelper = KoinHelper()
-
-        init() {
-            self.loadLaunches(forceReload: true)
-        }
-
-        func loadLaunches(forceReload: Bool) {
-           Task {
-               do {
-                   self.launches = .loading
-                   let launches = try await helper.getLaunches(forceReload: forceReload)
-                   self.launches = .result(launches)
-               } catch {
-                   self.launches = .error(error.localizedDescription)
-               }
-           }
+    
+    private func load() {
+        Task {
+            try? await self.viewModel.load()
         }
     }
 }

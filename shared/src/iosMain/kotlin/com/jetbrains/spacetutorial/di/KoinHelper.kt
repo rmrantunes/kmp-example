@@ -1,8 +1,8 @@
 package com.jetbrains.spacetutorial.di
 
-import com.jetbrains.spacetutorial.RocketLaunch
 import com.jetbrains.spacetutorial.SpaceXSDK
 import com.jetbrains.spacetutorial.cache.IOSDatabaseDriverFactory
+import com.jetbrains.spacetutorial.feature.rocketlaunch.SharedRocketLaunchViewModel
 import com.jetbrains.spacetutorial.network.SpaceXApi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -10,11 +10,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 class KoinHelper : KoinComponent {
-    private val sdk: SpaceXSDK by inject<SpaceXSDK>()
-
-    suspend fun getLaunches(forceReload: Boolean): List<RocketLaunch> {
-        return sdk.getLaunches(forceReload)
-    }
+    val rocketLaunchViewModel: SharedRocketLaunchViewModel by inject()
 
     companion object {
         fun start() {
@@ -26,6 +22,7 @@ class KoinHelper : KoinComponent {
                             databaseDriverFactory = IOSDatabaseDriverFactory(), api = get()
                         )
                     }
+                    single<SharedRocketLaunchViewModel> { SharedRocketLaunchViewModel(get()) }
                 })
             }
         }
