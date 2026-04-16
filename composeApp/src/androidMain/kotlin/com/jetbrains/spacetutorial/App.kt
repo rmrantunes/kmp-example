@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -80,6 +81,17 @@ fun App() {
                             textAlign = TextAlign.Center,
                             fontSize = titleFontSize
                         )
+                    },
+                    actions = {
+                        TextButton(
+                            enabled = !state.isLoading,
+                            onClick = {
+                            coroutineScope.launch {
+                                viewModel.load()
+                            }
+                        }) {
+                            Text("Reload", fontWeight = FontWeight.SemiBold)
+                        }
                     }
                 )
             }
