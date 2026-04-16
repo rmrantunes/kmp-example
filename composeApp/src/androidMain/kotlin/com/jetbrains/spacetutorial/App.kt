@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
 import com.jetbrains.spacetutorial.ui.theme.AppTheme
 import com.jetbrains.spacetutorial.ui.theme.app_theme_successful
@@ -47,8 +48,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 @Preview
 fun App() {
-    val viewModel = koinViewModel<RocketLaunchViewModel>()
-    val state by remember { viewModel.state }
+    val viewModel = koinViewModel<RocketLaunchViewModel>().sharedVm
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
     var isRefreshing by remember { mutableStateOf(false)}
     val pullToRefreshState = rememberPullToRefreshState()
@@ -92,7 +93,7 @@ fun App() {
                 onRefresh = {
                     isRefreshing = true
                     coroutineScope.launch {
-                        viewModel.loadLaunches()
+                        viewModel.load()
                         isRefreshing = false
                     }
                 }
