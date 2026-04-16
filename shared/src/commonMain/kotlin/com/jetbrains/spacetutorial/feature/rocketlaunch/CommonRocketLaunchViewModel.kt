@@ -1,32 +1,27 @@
 package com.jetbrains.spacetutorial.feature.rocketlaunch
 
-import com.jetbrains.spacetutorial.model.RocketLaunch
 import com.jetbrains.spacetutorial.SpaceXSDK
+import com.jetbrains.spacetutorial.ui.RocketLaunchUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 interface IRocketLaunchViewModel {
-    val state: StateFlow<RocketLaunchScreenState>
+    val state: StateFlow<RocketLaunchUiState>
     suspend fun load()
 }
 
 class CommonRocketLaunchViewModel(private val sdk: SpaceXSDK) : IRocketLaunchViewModel {
-    private val _state = MutableStateFlow(RocketLaunchScreenState())
-    override val state: StateFlow<RocketLaunchScreenState> = _state
+    private val _state = MutableStateFlow<RocketLaunchUiState>(RocketLaunchUiState.Loading)
+    override val state: StateFlow<RocketLaunchUiState> = _state
 
     override suspend fun load() {
-        _state.update { it.copy(isLoading = true, launches = emptyList()) }
+        _state.update { RocketLaunchUiState.Loading }
         try {
             val launches = sdk.getLaunches(true)
-            _state.update { it.copy(isLoading = false, launches = launches) }
+            _state.update { RocketLaunchUiState.Success(launches = launches) }
         } catch (e: Exception) {
-            _state.update { it.copy(isLoading = false, launches = emptyList()) }
+            _state.update { RocketLaunchUiState.Fail(e.message) }
         }
     }
 }
-
-data class RocketLaunchScreenState(
-    val isLoading: Boolean = false,
-    val launches: List<RocketLaunch> = emptyList()
-)

@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
+import com.jetbrains.spacetutorial.ui.RocketLaunchUiState
 import com.jetbrains.spacetutorial.ui.theme.AppTheme
 import com.jetbrains.spacetutorial.ui.theme.app_theme_successful
 import com.jetbrains.spacetutorial.ui.theme.app_theme_unsuccessful
@@ -84,7 +85,7 @@ fun App() {
                     },
                     actions = {
                         TextButton(
-                            enabled = !state.isLoading,
+                            enabled = state !is RocketLaunchUiState.Loading,
                             onClick = {
                             coroutineScope.launch {
                                 viewModel.load()
@@ -110,36 +111,53 @@ fun App() {
                     }
                 }
             ) {
-                if (state.isLoading && !isRefreshing) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Text("Loading...", style = MaterialTheme.typography.bodyMedium)
+                when (val uiState = state) {
+                    RocketLaunchUiState.Loading -> if (!isRefreshing) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Text("Loading...", style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
-                } else {
-                    LazyColumn {
-                        items(state.launches) { launch ->
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    text = "${launch.missionName} - ${launch.launchYear}",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Spacer(Modifier.height(8.dp))
-                                Text(
-                                    text = if (launch.launchSuccess == true) "Successful" else "Unsuccessful",
-                                    color = if (launch.launchSuccess == true) app_theme_successful else app_theme_unsuccessful,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                Spacer(Modifier.height(8.dp))
-                                val details = launch.details
-                                if (!details.isNullOrBlank()) {
-                                    Text(details, fontWeight = FontWeight.Medium)
-                                }
-                            }
-                            HorizontalDivider(color = Color.LightGray)
+
+                   is RocketLaunchUiState.Success -> {
+                       LazyColumn {
+                           items(
+                               items = uiState.launches
+                           ) { launch ->
+                               Column(modifier = Modifier.padding(16.dp)) {
+                                   Text(
+                                       text = "${launch.missionName} - ${launch.launchYear}",
+                                       style = MaterialTheme.typography.headlineSmall,
+                                       fontWeight = FontWeight.Bold
+                                   )
+                                   Spacer(Modifier.height(8.dp))
+                                   Text(
+                                       text = if (launch.launchSuccess == true) "Successful" else "Unsuccessful",
+                                       color = if (launch.launchSuccess == true) app_theme_successful else app_theme_unsuccessful,
+                                       fontWeight = FontWeight.Medium
+                                   )
+                                   Spacer(Modifier.height(8.dp))
+                                   val details = launch.details
+                                   if (!details.isNullOrBlank()) {
+                                       Text(details, fontWeight = FontWeight.Medium)
+                                   }
+                               }
+                               HorizontalDivider(color = Color.LightGray)
+                           }
+                       }
+                   }
+
+                    is RocketLaunchUiState.Fail -> {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            if (!uiState.message.isNullOrBlank()) Text(uiState.message!!)
+                            else Text("Something went wrong. Try again.")
                         }
                     }
                 }

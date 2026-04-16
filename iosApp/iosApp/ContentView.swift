@@ -1,13 +1,11 @@
-import SwiftUI
 import Shared
+import SwiftUI
 
 @MainActor
 struct ContentView: View {
     @State private(set) var viewModel: IRocketLaunchViewModel
-    
-    @State private var state = RocketLaunchScreenState(
-        isLoading: false, launches: []
-    )
+
+    @State private var state: RocketLaunchUiState = RocketLaunchUiStateLoading()
 
     var body: some View {
         NavigationView {
@@ -32,15 +30,23 @@ struct ContentView: View {
     }
 
     private func listView() -> AnyView {
-        if(state.isLoading) {
+        switch onEnum(of: self.state) {
+        case .loading:
             return AnyView(Text("Loading...").multilineTextAlignment(.center))
-        } else {
-            return AnyView(List(state.launches) {launch in
-                RocketLaunchRow(rocketLaunch: launch)
-            })
+        case .success(let success):
+            return AnyView(
+                List(success.launches, id: \.id) { launch in
+                    RocketLaunchRow(rocketLaunch: launch)
+                }
+            )
+        case .fail(let fail):
+            let message: String =
+                fail.message ?? "Something went wrong. Try again later."
+            return AnyView(Text(message).multilineTextAlignment(.center))
+
         }
     }
-    
+
     private func load() {
         Task {
             try? await self.viewModel.load()
