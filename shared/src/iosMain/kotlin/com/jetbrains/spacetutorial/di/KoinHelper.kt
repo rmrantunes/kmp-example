@@ -2,7 +2,7 @@ package com.jetbrains.spacetutorial.di
 
 import com.jetbrains.spacetutorial.SpaceXSDK
 import com.jetbrains.spacetutorial.cache.IOSDatabaseDriverFactory
-import com.jetbrains.spacetutorial.feature.rocketlaunch.SharedRocketLaunchViewModel
+import com.jetbrains.spacetutorial.feature.rocketlaunch.CommonRocketLaunchViewModel
 import com.jetbrains.spacetutorial.network.SpaceXApi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -10,7 +10,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 class KoinHelper : KoinComponent {
-    val rocketLaunchViewModel: SharedRocketLaunchViewModel by inject()
+    val rocketLaunchViewModel: CommonRocketLaunchViewModel by inject()
 
     companion object {
         fun start() {
@@ -22,7 +22,7 @@ class KoinHelper : KoinComponent {
                             databaseDriverFactory = IOSDatabaseDriverFactory(), api = get()
                         )
                     }
-                    single<SharedRocketLaunchViewModel> { SharedRocketLaunchViewModel(get()) }
+                    single<CommonRocketLaunchViewModel> { CommonRocketLaunchViewModel(get()) }
                 })
             }
         }

@@ -3,7 +3,7 @@ import Shared
 
 @MainActor
 struct ContentView: View {
-    @State private(set) var viewModel: SharedRocketLaunchViewModel
+    @State private(set) var viewModel: IRocketLaunchViewModel
     
     @State private var state = RocketLaunchScreenState(
         isLoading: false, launches: []
