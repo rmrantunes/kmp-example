@@ -1,47 +1,136 @@
 package com.jetbrains.spacetutorial
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
+import com.jetbrains.spacetutorial.ui.theme.AppTheme
+import com.jetbrains.spacetutorial.ui.theme.app_theme_successful
+import com.jetbrains.spacetutorial.ui.theme.app_theme_unsuccessful
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
-import spacetutorial.composeapp.generated.resources.Res
-import spacetutorial.composeapp.generated.resources.compose_multiplatform
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
+    val viewModel = koinViewModel<RocketLaunchViewModel>()
+    val state by remember { viewModel.state }
+    val coroutineScope = rememberCoroutineScope()
+    var isRefreshing by remember { mutableStateOf(false)}
+    val pullToRefreshState = rememberPullToRefreshState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
+    val collapsedFraction by remember {
+        derivedStateOf { scrollBehavior.state.collapsedFraction }
+    }
+
+    val titleFontSize by remember {
+        derivedStateOf {
+            lerp(32.sp.value, 20.sp.value, collapsedFraction).sp
+        }
+    }
+
+    AppTheme {
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                MediumTopAppBar(
+                    scrollBehavior = scrollBehavior,
+                    title = {
+                        Text(
+                            "SpaceX Launches",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            fontSize = titleFontSize
+                        )
+                    }
+                )
             }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+        ) { padding ->
+            PullToRefreshBox(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                state = pullToRefreshState,
+                isRefreshing = isRefreshing,
+                onRefresh = {
+                    isRefreshing = true
+                    coroutineScope.launch {
+                        viewModel.loadLaunches()
+                        isRefreshing = false
+                    }
+                }
+            ) {
+                if (state.isLoading && !isRefreshing) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text("Loading...", style = MaterialTheme.typography.bodyMedium)
+                    }
+                } else {
+                    LazyColumn {
+                        items(state.launches) { launch ->
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = "${launch.missionName} - ${launch.launchYear}",
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                Text(
+                                    text = if (launch.launchSuccess == true) "Successful" else "Unsuccessful",
+                                    color = if (launch.launchSuccess == true) app_theme_successful else app_theme_unsuccessful,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                val details = launch.details
+                                if (!details.isNullOrBlank()) {
+                                    Text(details, fontWeight = FontWeight.Medium)
+                                }
+                            }
+                            HorizontalDivider(color = Color.LightGray)
+                        }
+                    }
                 }
             }
         }
