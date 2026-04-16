@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class RocketLaunchViewModel(val sharedVm: SharedRocketLaunchViewModel) : ViewModel() {
+class RocketLaunchViewModel(sharedVm: IRocketLaunchViewModel) : ViewModel(),
+    IRocketLaunchViewModel by sharedVm {
     init {
         viewModelScope.launch {
             sharedVm.load()

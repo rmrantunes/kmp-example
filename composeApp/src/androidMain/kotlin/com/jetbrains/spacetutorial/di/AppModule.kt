@@ -21,6 +21,6 @@ val appModule = module {
     }
     single<SharedRocketLaunchViewModel> { SharedRocketLaunchViewModel(get()) }
     viewModel {
-        RocketLaunchViewModel(get())
+        RocketLaunchViewModel(get<SharedRocketLaunchViewModel>())
     }
 }

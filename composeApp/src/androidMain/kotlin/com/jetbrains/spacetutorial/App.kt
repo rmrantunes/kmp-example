@@ -48,7 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 @Preview
 fun App() {
-    val viewModel = koinViewModel<RocketLaunchViewModel>().sharedVm
+    val viewModel = koinViewModel<RocketLaunchViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
     var isRefreshing by remember { mutableStateOf(false)}

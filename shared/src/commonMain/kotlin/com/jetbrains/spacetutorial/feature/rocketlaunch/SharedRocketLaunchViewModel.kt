@@ -6,11 +6,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class SharedRocketLaunchViewModel(private val sdk: SpaceXSDK) {
-    private val _state = MutableStateFlow(RocketLaunchScreenState())
-    val state: StateFlow<RocketLaunchScreenState> = _state
+interface IRocketLaunchViewModel {
+    val state: StateFlow<RocketLaunchScreenState>
+    suspend fun load()
+}
 
-    suspend fun load() {
+class SharedRocketLaunchViewModel(private val sdk: SpaceXSDK) : IRocketLaunchViewModel {
+    private val _state = MutableStateFlow(RocketLaunchScreenState())
+    override val state: StateFlow<RocketLaunchScreenState> = _state
+
+    override suspend fun load() {
         _state.update { it.copy(isLoading = true, launches = emptyList()) }
         try {
             val launches = sdk.getLaunches(true)
