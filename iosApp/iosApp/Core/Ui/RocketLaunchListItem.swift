@@ -6,7 +6,7 @@ import Foundation
 import SwiftUI
 import Shared
 
-struct RocketLaunchRow: View {
+struct RocketLaunchListItem: View {
     var rocketLaunch: RocketLaunch
 
     var body: some View {
@@ -23,7 +23,7 @@ struct RocketLaunchRow: View {
     }
 }
 
-extension RocketLaunchRow {
+extension RocketLaunchListItem {
     private var launchText: String {
         if let isSuccess = rocketLaunch.launchSuccess {
             return isSuccess.boolValue ? "Success" : "Failure"
