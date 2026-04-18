@@ -2,7 +2,7 @@ package com.jetbrains.spacetutorial.feature.rocketlaunch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jetbrains.spacetutorial.network.SpaceXSDK
+import com.jetbrains.spacetutorial.data.repository.OfflineFirstSpaceXLaunchesRepository
 import com.jetbrains.spacetutorial.ui.RocketLaunchUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +17,7 @@ interface IRocketLaunchViewModel {
     fun load()
 }
 
-class RocketLaunchViewModel(val sdk: SpaceXSDK) : ViewModel(),
+class RocketLaunchViewModel(val spaceXLaunchesRepository: OfflineFirstSpaceXLaunchesRepository) : ViewModel(),
     IRocketLaunchViewModel {
     private val _state = MutableStateFlow<RocketLaunchUiState>(RocketLaunchUiState.Loading)
     override val state: StateFlow<RocketLaunchUiState> = _state
@@ -36,7 +36,7 @@ class RocketLaunchViewModel(val sdk: SpaceXSDK) : ViewModel(),
         viewModelScope.launch {
             _state.update { RocketLaunchUiState.Loading }
             try {
-                val launches = sdk.getLaunches(true)
+                val launches = spaceXLaunchesRepository.getLaunches(true)
                 _state.update { RocketLaunchUiState.Success(launches = launches) }
             } catch (e: Exception) {
                 _state.update { RocketLaunchUiState.Fail(e.message) }

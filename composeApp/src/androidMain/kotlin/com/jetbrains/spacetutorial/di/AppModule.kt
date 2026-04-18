@@ -1,6 +1,6 @@
 package com.jetbrains.spacetutorial.di
 
-import com.jetbrains.spacetutorial.network.SpaceXSDK
+import com.jetbrains.spacetutorial.data.repository.OfflineFirstSpaceXLaunchesRepository
 import com.jetbrains.spacetutorial.cache.AndroidDatabaseDriverFactory
 import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
 import com.jetbrains.spacetutorial.network.SpaceXApi
@@ -10,8 +10,8 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<SpaceXApi> { SpaceXApi() }
-    single<SpaceXSDK> {
-        SpaceXSDK(
+    single<OfflineFirstSpaceXLaunchesRepository> {
+        OfflineFirstSpaceXLaunchesRepository(
             AndroidDatabaseDriverFactory(
                 androidContext()
             ),

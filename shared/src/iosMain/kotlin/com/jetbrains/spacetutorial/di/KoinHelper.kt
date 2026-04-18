@@ -5,19 +5,18 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.jetbrains.spacetutorial.cache.IOSDatabaseDriverFactory
 import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
 import com.jetbrains.spacetutorial.network.SpaceXApi
-import com.jetbrains.spacetutorial.network.SpaceXSDK
+import com.jetbrains.spacetutorial.data.repository.OfflineFirstSpaceXLaunchesRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 class KoinHelper : KoinComponent {
-
     val rocketLaunchViewModelFactory by lazy {
-        val spaceXSDK by inject<SpaceXSDK>()
+        val offlineFirstSpaceXLaunchesRepository by inject<OfflineFirstSpaceXLaunchesRepository>()
 
         viewModelFactory {
-            initializer { RocketLaunchViewModel(spaceXSDK) }
+            initializer { RocketLaunchViewModel(offlineFirstSpaceXLaunchesRepository) }
         }
     }
 
@@ -26,8 +25,8 @@ class KoinHelper : KoinComponent {
             startKoin {
                 modules(module {
                     single<SpaceXApi> { SpaceXApi() }
-                    single<SpaceXSDK> {
-                        SpaceXSDK(
+                    single<OfflineFirstSpaceXLaunchesRepository> {
+                        OfflineFirstSpaceXLaunchesRepository(
                             databaseDriverFactory = IOSDatabaseDriverFactory(), api = get()
                         )
                     }

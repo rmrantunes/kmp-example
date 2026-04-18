@@ -1,11 +1,12 @@
-package com.jetbrains.spacetutorial.network
+package com.jetbrains.spacetutorial.data.repository
 
 import com.jetbrains.spacetutorial.cache.Database
 import com.jetbrains.spacetutorial.cache.DatabaseDriverFactory
 import com.jetbrains.spacetutorial.model.RocketLaunch
+import com.jetbrains.spacetutorial.network.SpaceXApi
 import com.jetbrains.spacetutorial.network.model.toModel
 
-class SpaceXSDK(databaseDriverFactory: DatabaseDriverFactory, val api: SpaceXApi) {
+class OfflineFirstSpaceXLaunchesRepository(databaseDriverFactory: DatabaseDriverFactory, val api: SpaceXApi) {
     private val database = Database(databaseDriverFactory)
 
     @Throws(Exception::class)

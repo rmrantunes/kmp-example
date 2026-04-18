@@ -7,7 +7,7 @@
 import SwiftUI
 import Shared
 
-/// - See https://developer.android.com/kotlin/multiplatform/viewmodel
+/// - See: https://developer.android.com/kotlin/multiplatform/viewmodel
 class IosViewModelStoreOwner: ObservableObject, ViewModelStoreOwner {
     let viewModelStore = ViewModelStore()
 
