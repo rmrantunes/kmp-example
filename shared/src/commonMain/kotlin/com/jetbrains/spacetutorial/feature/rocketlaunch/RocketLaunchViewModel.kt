@@ -20,7 +20,13 @@ interface IRocketLaunchViewModel {
 class RocketLaunchViewModel(val sdk: SpaceXSDK) : ViewModel(),
     IRocketLaunchViewModel {
     private val _state = MutableStateFlow<RocketLaunchUiState>(RocketLaunchUiState.Loading)
-    override val state: StateFlow<RocketLaunchUiState> = _state.onStart { load() }.stateIn(
+    override val state: StateFlow<RocketLaunchUiState> = _state
+        .onStart {
+            if (_state.value !is RocketLaunchUiState.Success) {
+                load()
+            }
+        }
+        .stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000L),
         RocketLaunchUiState.Loading
