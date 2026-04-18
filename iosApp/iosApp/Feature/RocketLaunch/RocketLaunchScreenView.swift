@@ -31,9 +31,6 @@ struct RocketLaunchScreenView: View {
                 self.state = state
             }
         }
-        .task {
-            try? await self.viewModel.load()
-        }
     }
 
     private func listView() -> AnyView {

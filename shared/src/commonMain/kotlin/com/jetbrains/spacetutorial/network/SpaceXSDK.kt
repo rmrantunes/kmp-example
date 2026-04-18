@@ -3,6 +3,7 @@ package com.jetbrains.spacetutorial.network
 import com.jetbrains.spacetutorial.cache.Database
 import com.jetbrains.spacetutorial.cache.DatabaseDriverFactory
 import com.jetbrains.spacetutorial.model.RocketLaunch
+import com.jetbrains.spacetutorial.network.model.toModel
 
 class SpaceXSDK(databaseDriverFactory: DatabaseDriverFactory, val api: SpaceXApi) {
     private val database = Database(databaseDriverFactory)
@@ -10,10 +11,10 @@ class SpaceXSDK(databaseDriverFactory: DatabaseDriverFactory, val api: SpaceXApi
     @Throws(Exception::class)
     suspend fun getLaunches(forceReload: Boolean): List<RocketLaunch> {
         val cachedValues = database.getAllLaunches()
-        return if(cachedValues.isNotEmpty() && !forceReload) {
+        return if (cachedValues.isNotEmpty() && !forceReload) {
             cachedValues
         } else {
-            api.getAllLaunches().also {
+            api.getAllLaunches().map { it.toModel() }.also {
                 database.clearAndCreateLaunches(it)
             }
         }

@@ -4,10 +4,11 @@ import SwiftUI
 @MainActor
 struct ContentView: View {
     let di = KoinHelper()
+    @StateObject private var viewModelStoreOwner = IosViewModelStoreOwner()
 
-    @State private var state: RocketLaunchUiState = RocketLaunchUiStateLoading()
 
     var body: some View {
-        RocketLaunchScreenView(viewModel: di.rocketLaunchViewModel)
+        let viewModel: RocketLaunchViewModel = viewModelStoreOwner.viewModel(factory: di.rocketLaunchViewModelFactory)
+        RocketLaunchScreenView(viewModel: viewModel)
     }
 }

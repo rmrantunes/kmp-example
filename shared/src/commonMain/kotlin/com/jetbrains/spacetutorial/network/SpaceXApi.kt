@@ -1,6 +1,7 @@
 package com.jetbrains.spacetutorial.network
 
 import com.jetbrains.spacetutorial.model.RocketLaunch
+import com.jetbrains.spacetutorial.network.model.NetworkRocketLaunch
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -18,7 +19,7 @@ class SpaceXApi {
         }
     }
 
-    suspend fun getAllLaunches(): List<RocketLaunch> {
+    suspend fun getAllLaunches(): List<NetworkRocketLaunch> {
         return httpClient.get("https://api.spacexdata.com/v5/launches").body()
     }
 }
