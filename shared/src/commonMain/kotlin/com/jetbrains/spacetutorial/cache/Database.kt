@@ -1,15 +1,21 @@
 package com.jetbrains.spacetutorial.cache
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.jetbrains.spacetutorial.model.Links
 import com.jetbrains.spacetutorial.model.Patch
 import com.jetbrains.spacetutorial.model.RocketLaunch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.Flow
 
 internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
     private val dbQuery = database.appDatabaseQueries
 
-    internal fun getAllLaunches(): List<RocketLaunch> {
-        return dbQuery.selectAllLaunchesInfo(::mapLaunchSelecting).executeAsList()
+    internal fun getAllLaunchesStream(): Flow<List<RocketLaunch>> {
+        return dbQuery.selectAllLaunchesInfo(::mapLaunchSelecting).asFlow()
+            .mapToList(Dispatchers.IO)
     }
 
     private fun mapLaunchSelecting(

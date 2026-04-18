@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.koin.core)
             api(libs.androidx.lifecycle.viewmodel)
+            implementation("app.cash.sqldelight:coroutines-extensions:2.3.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
