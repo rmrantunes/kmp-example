@@ -20,22 +20,30 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+
+            export(project(":core:data"))
+            export(project(":core:database"))
+            export(project(":core:model"))
+            export(project(":core:network"))
+            export(project(":core:ui"))
+            export(project(":feature:rocketlaunch"))
+
             export(libs.androidx.lifecycle.viewmodel)
         }
     }
     
     sourceSets {
         commonMain.dependencies {
-            // should contain all :core:* and :feature:* to be visible to iOS
-            implementation(project(":core:data"))
-            implementation(project(":core:database"))
-            implementation(project(":core:model"))
-            implementation(project(":core:network"))
-            implementation(project(":core:ui"))
-            implementation(project(":feature:rocketlaunch"))
+            api(project(":core:data"))
+            api(project(":core:database"))
+            api(project(":core:model"))
+            api(project(":core:network"))
+            api(project(":core:ui"))
+            api(project(":feature:rocketlaunch"))
+
+            api(libs.androidx.lifecycle.viewmodel)
 
             implementation(libs.kotlinx.coroutines.core)
-            api(libs.androidx.lifecycle.viewmodel)
             implementation(libs.koin.core)
         }
         commonTest.dependencies {

@@ -7,7 +7,7 @@ import SwiftUI
 import Shared
 
 struct RocketLaunchListItem: View {
-    var rocketLaunch: ModelRocketLaunch
+    var rocketLaunch: RocketLaunch
 
     var body: some View {
         HStack {
