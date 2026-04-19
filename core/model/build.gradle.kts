@@ -1,16 +1,10 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidKotlinMultiplatformLibrary)
-    alias(libs.plugins.androidLint)
+    alias(libs.plugins.androidLibrary)
 }
 
 kotlin {
-    androidLibrary {
-        namespace = "com.jetbrains.spacetutorial.core.model"
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-
+    androidTarget()
     iosArm64()
     iosSimulatorArm64()
 
@@ -31,4 +25,9 @@ kotlin {
 
         iosMain.dependencies {}
     }
+}
+
+android {
+    namespace = "com.jetbrains.spacetutorial.core.model"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 }
