@@ -33,8 +33,6 @@ kotlin {
 
             implementation(project(":feature:rocketlaunch"))
 
-            implementation(projects.shared)
-
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui)
