@@ -3,8 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.sqldelight)
     id("co.touchlab.skie") version "0.10.11"
 }
 
@@ -27,33 +25,24 @@ kotlin {
     }
     
     sourceSets {
-//        all {
-//            languageSettings.optIn("kotlin.time.ExperimentalTime")
-//        }
-
         commonMain.dependencies {
+            // should contain all :core:* and :feature:* to be visible to iOS
+            implementation(project(":core:data"))
+            implementation(project(":core:database"))
             implementation(project(":core:model"))
+            implementation(project(":core:network"))
+            implementation(project(":core:ui"))
+            implementation(project(":feature:rocketlaunch"))
+
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.runtime)
-//            implementation(libs.kotlinx.datetime)
-            implementation(libs.koin.core)
             api(libs.androidx.lifecycle.viewmodel)
-            implementation("app.cash.sqldelight:coroutines-extensions:2.3.2")
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-        androidMain.dependencies {
-            implementation(libs.ktor.client.android)
-            implementation(libs.android.driver)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.native.driver)
-        }
+        androidMain.dependencies {}
+        iosMain.dependencies {}
     }
 }
 
@@ -66,13 +55,5 @@ android {
     }
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-}
-
-sqldelight {
-    databases {
-        create("AppDatabase") {
-            packageName.set("com.jetbrains.spacetutorial.cache")
-        }
     }
 }

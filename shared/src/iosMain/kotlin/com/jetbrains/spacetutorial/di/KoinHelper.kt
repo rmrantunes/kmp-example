@@ -2,10 +2,10 @@ package com.jetbrains.spacetutorial.di
 
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.jetbrains.spacetutorial.cache.IOSDatabaseDriverFactory
+import com.jetbrains.spacetutorial.core.database.IOSDatabaseDriverFactory
 import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
-import com.jetbrains.spacetutorial.network.SpaceXApi
-import com.jetbrains.spacetutorial.data.repository.OfflineFirstSpaceXLaunchesRepository
+import com.jetbrains.spacetutorial.core.network.spacexapi.SpaceXApi
+import com.jetbrains.spacetutorial.core.data.repository.OfflineFirstSpaceXLaunchesRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
