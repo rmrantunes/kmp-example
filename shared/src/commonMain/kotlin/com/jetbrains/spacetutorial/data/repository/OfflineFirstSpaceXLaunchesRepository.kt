@@ -2,7 +2,7 @@ package com.jetbrains.spacetutorial.data.repository
 
 import com.jetbrains.spacetutorial.cache.Database
 import com.jetbrains.spacetutorial.cache.DatabaseDriverFactory
-import com.jetbrains.spacetutorial.model.RocketLaunch
+import com.jetbrains.spacetutorial.core.model.RocketLaunch
 import com.jetbrains.spacetutorial.network.SpaceXApi
 import com.jetbrains.spacetutorial.network.model.toModel
 import kotlinx.coroutines.flow.Flow

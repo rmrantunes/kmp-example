@@ -58,4 +58,4 @@ struct RocketLaunchScreenView: View {
     }
 }
 
-extension RocketLaunch: Identifiable {}
+extension ModelRocketLaunch: Identifiable {}

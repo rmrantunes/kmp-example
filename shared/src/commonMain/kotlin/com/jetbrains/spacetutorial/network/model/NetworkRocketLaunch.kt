@@ -1,13 +1,10 @@
 package com.jetbrains.spacetutorial.network.model
 
-import com.jetbrains.spacetutorial.model.Links
-import com.jetbrains.spacetutorial.model.Patch
-import com.jetbrains.spacetutorial.model.RocketLaunch
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import com.jetbrains.spacetutorial.core.model.Links
+import com.jetbrains.spacetutorial.core.model.Patch
+import com.jetbrains.spacetutorial.core.model.RocketLaunch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.time.Instant
 
 @Serializable
 data class NetworkRocketLaunch(

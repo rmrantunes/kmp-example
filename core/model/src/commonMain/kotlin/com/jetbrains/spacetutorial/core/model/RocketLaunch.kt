@@ -1,4 +1,4 @@
-package com.jetbrains.spacetutorial.model
+package com.jetbrains.spacetutorial.core.model
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime

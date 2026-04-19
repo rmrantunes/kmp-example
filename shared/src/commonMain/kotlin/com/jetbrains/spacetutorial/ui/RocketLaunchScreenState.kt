@@ -1,6 +1,6 @@
 package com.jetbrains.spacetutorial.ui
 
-import com.jetbrains.spacetutorial.model.RocketLaunch
+import com.jetbrains.spacetutorial.core.model.RocketLaunch
 
 sealed interface RocketLaunchUiState {
     data object Loading : RocketLaunchUiState

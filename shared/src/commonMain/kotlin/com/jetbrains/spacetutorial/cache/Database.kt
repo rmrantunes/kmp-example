@@ -2,9 +2,9 @@ package com.jetbrains.spacetutorial.cache
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.jetbrains.spacetutorial.model.Links
-import com.jetbrains.spacetutorial.model.Patch
-import com.jetbrains.spacetutorial.model.RocketLaunch
+import com.jetbrains.spacetutorial.core.model.Links
+import com.jetbrains.spacetutorial.core.model.Patch
+import com.jetbrains.spacetutorial.core.model.RocketLaunch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow

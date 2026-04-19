@@ -27,17 +27,18 @@ kotlin {
     }
     
     sourceSets {
-        all {
-            languageSettings.optIn("kotlin.time.ExperimentalTime")
-        }
+//        all {
+//            languageSettings.optIn("kotlin.time.ExperimentalTime")
+//        }
 
         commonMain.dependencies {
+            implementation(project(":core:model"))
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.runtime)
-            implementation(libs.kotlinx.datetime)
+//            implementation(libs.kotlinx.datetime)
             implementation(libs.koin.core)
             api(libs.androidx.lifecycle.viewmodel)
             implementation("app.cash.sqldelight:coroutines-extensions:2.3.2")

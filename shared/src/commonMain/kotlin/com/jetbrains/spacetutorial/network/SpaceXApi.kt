@@ -1,6 +1,5 @@
 package com.jetbrains.spacetutorial.network
 
-import com.jetbrains.spacetutorial.model.RocketLaunch
 import com.jetbrains.spacetutorial.network.model.NetworkRocketLaunch
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

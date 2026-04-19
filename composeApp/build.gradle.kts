@@ -25,6 +25,7 @@ kotlin {
             implementation("androidx.compose.ui:ui-text-google-fonts:1.10.5")
         }
         commonMain.dependencies {
+            implementation(project(":core:model"))
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui)
