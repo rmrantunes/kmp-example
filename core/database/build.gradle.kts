@@ -14,8 +14,8 @@ kotlin {
 
         commonMain.dependencies {
             implementation(project(":core:model"))
-            implementation(libs.runtime)
-            implementation("app.cash.sqldelight:coroutines-extensions:2.3.2")
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
         }
 
         commonTest.dependencies {}

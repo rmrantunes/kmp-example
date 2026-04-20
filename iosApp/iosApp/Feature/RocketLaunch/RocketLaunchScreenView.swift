@@ -41,6 +41,8 @@ struct RocketLaunchScreenView: View {
             return AnyView(
                 List(success.launches, id: \.id) { launch in
                     RocketLaunchListItem(rocketLaunch: launch)
+                }.refreshable {
+                    load()
                 }
             )
         case .fail(let fail):
