@@ -17,12 +17,10 @@ kotlin {
     
     sourceSets {
         androidMain.dependencies {
-            implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.koin.androidx.compose)
             implementation(libs.androidx.compose.material3)
             implementation(libs.koin.androidx.compose)
-            implementation("androidx.compose.ui:ui-text-google-fonts:1.10.5")
+            implementation(libs.androidx.compose.ui.text.google.fonts)
         }
         commonMain.dependencies {
             implementation(project(":core:data"))
