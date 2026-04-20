@@ -53,7 +53,7 @@ struct RocketLaunchScreenView: View {
 
     private func load() {
         Task {
-            try? await self.viewModel.load()
+            self.viewModel.load()
         }
     }
 }

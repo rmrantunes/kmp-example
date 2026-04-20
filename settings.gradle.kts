@@ -28,5 +28,13 @@ dependencyResolutionManagement {
     }
 }
 
+//core
 include(":composeApp")
 include(":shared")
+include(":core:data")
+include(":core:database")
+include(":core:model")
+include(":core:network")
+include(":core:ui")
+// feature
+include(":feature:rocketlaunch")

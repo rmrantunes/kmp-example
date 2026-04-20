@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jetbrains.spacetutorial.feature.rocketlaunch.RocketLaunchViewModel
-import com.jetbrains.spacetutorial.ui.RocketLaunchUiState
+import com.jetbrains.spacetutorial.core.ui.RocketLaunchUiState
 import com.jetbrains.spacetutorial.ui.theme.AppTheme
 import com.jetbrains.spacetutorial.ui.theme.app_theme_successful
 import com.jetbrains.spacetutorial.ui.theme.app_theme_unsuccessful

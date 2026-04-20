@@ -3,8 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.sqldelight)
     id("co.touchlab.skie") version "0.10.11"
 }
 
@@ -22,36 +20,37 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+
+            export(project(":core:data"))
+            export(project(":core:database"))
+            export(project(":core:model"))
+            export(project(":core:network"))
+            export(project(":core:ui"))
+            export(project(":feature:rocketlaunch"))
+
             export(libs.androidx.lifecycle.viewmodel)
         }
     }
     
     sourceSets {
-        all {
-            languageSettings.optIn("kotlin.time.ExperimentalTime")
-        }
-
         commonMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.runtime)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.koin.core)
+            api(project(":core:data"))
+            api(project(":core:database"))
+            api(project(":core:model"))
+            api(project(":core:network"))
+            api(project(":core:ui"))
+            api(project(":feature:rocketlaunch"))
+
             api(libs.androidx.lifecycle.viewmodel)
+
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-        androidMain.dependencies {
-            implementation(libs.ktor.client.android)
-            implementation(libs.android.driver)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.native.driver)
-        }
+        androidMain.dependencies {}
+        iosMain.dependencies {}
     }
 }
 
@@ -64,13 +63,5 @@ android {
     }
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-}
-
-sqldelight {
-    databases {
-        create("AppDatabase") {
-            packageName.set("com.jetbrains.spacetutorial.cache")
-        }
     }
 }

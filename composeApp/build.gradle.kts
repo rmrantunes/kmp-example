@@ -25,12 +25,19 @@ kotlin {
             implementation("androidx.compose.ui:ui-text-google-fonts:1.10.5")
         }
         commonMain.dependencies {
+            implementation(project(":core:data"))
+            implementation(project(":core:database"))
+            implementation(project(":core:model"))
+            implementation(project(":core:network"))
+            implementation(project(":core:ui"))
+
+            implementation(project(":feature:rocketlaunch"))
+
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
-            implementation(projects.shared)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
