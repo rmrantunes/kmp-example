@@ -41,14 +41,24 @@ import com.jetbrains.spacetutorial.core.ui.RocketLaunchUiState
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RocketLaunchScreen() {
     val viewModel = koinViewModel<RocketLaunchViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    RocketLaunchScreen(state, onRefresh = viewModel::load)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RocketLaunchScreen(
+    uiState: RocketLaunchUiState,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val coroutineScope = rememberCoroutineScope()
-    var isRefreshing by remember { mutableStateOf(false)}
     val pullToRefreshState = rememberPullToRefreshState()
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     val collapsedFraction by remember {
@@ -62,7 +72,7 @@ fun RocketLaunchScreen() {
     }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MediumTopAppBar(
                 scrollBehavior = scrollBehavior,
@@ -78,10 +88,10 @@ fun RocketLaunchScreen() {
                 },
                 actions = {
                     TextButton(
-                        enabled = state !is RocketLaunchUiState.Loading,
+                        enabled = uiState !is RocketLaunchUiState.Loading,
                         onClick = {
                             coroutineScope.launch {
-                                viewModel.load()
+                                onRefresh()
                             }
                         }) {
                         Text("Reload", fontWeight = FontWeight.SemiBold)
@@ -95,17 +105,15 @@ fun RocketLaunchScreen() {
                 .fillMaxSize()
                 .padding(padding),
             state = pullToRefreshState,
-            isRefreshing = isRefreshing,
+            isRefreshing = uiState is RocketLaunchUiState.Loading,
             onRefresh = {
-                isRefreshing = true
                 coroutineScope.launch {
-                    viewModel.load()
-                    isRefreshing = false
+                    onRefresh()
                 }
             }
         ) {
-            when (val uiState = state) {
-                RocketLaunchUiState.Loading -> if (!isRefreshing) {
+            when (val uiState = uiState) {
+                RocketLaunchUiState.Loading -> {
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -129,7 +137,7 @@ fun RocketLaunchScreen() {
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     text = if (launch.launchSuccess == true) "Successful" else "Unsuccessful",
-                                   // color = if (launch.launchSuccess == true) app_theme_successful else app_theme_unsuccessful,
+                                    // color = if (launch.launchSuccess == true) app_theme_successful else app_theme_unsuccessful,
                                     fontWeight = FontWeight.Medium
                                 )
                                 Spacer(Modifier.height(8.dp))
