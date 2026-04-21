@@ -1,4 +1,5 @@
 rootProject.name = "SpaceTutorial"
+includeBuild("build-logic")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
