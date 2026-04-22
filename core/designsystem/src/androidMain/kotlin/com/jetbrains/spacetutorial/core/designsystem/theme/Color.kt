@@ -1,4 +1,4 @@
-package com.jetbrains.spacetutorial.ui.theme
+package com.jetbrains.spacetutorial.core.designsystem.theme
 import androidx.compose.ui.graphics.Color
 
 val app_theme_successful = Color(0xff4BB543)

@@ -19,12 +19,14 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.compose.material3)
-            implementation(libs.koin.androidx.compose)
             implementation(libs.androidx.compose.ui.text.google.fonts)
+
+            implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
             implementation(project(":core:data"))
             implementation(project(":core:database"))
+            implementation(project(":core:designsystem"))
             implementation(project(":core:model"))
             implementation(project(":core:network"))
             implementation(project(":core:ui"))
